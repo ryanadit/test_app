@@ -62,7 +62,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   }
 
   FutureOr<void> _onSearchContacts(_SearchContacts event, Emitter emit) async {
-    emit(state.copyWith(state: StateStatus.loadingSearch));
+    emit(state.copyWith(state: StateStatus.loadingSearch, selectedGender: null));
 
     final result = await _searchContactsUsecase.call(ContactParamEntity(name: event.name));
 
@@ -70,14 +70,15 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       emit(
         state.copyWith(
           state: StateStatus.successSearch,
-          listSearchResultContact: result.getRight() ?? []
+          listSearchResultContact: result.getRight() ?? [],
         )
       );
     } else {
       emit(
         state.copyWith(
           state: StateStatus.errorSearch,
-          errorMassage: result.getLeft()?.errorResponse
+          errorMassage: result.getLeft()?.errorResponse,
+          listSearchResultContact: [],
         )
       );
     }

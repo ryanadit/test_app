@@ -34,7 +34,9 @@ class _HomePageState extends State<HomePage> {
   void _actionScrollListener() {
     if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-      contactBloc.add(ContactEvent.loadMoreContacts());
+      if (contactBloc.state.listSearchResultContact.isEmpty) {
+        contactBloc.add(ContactEvent.loadMoreContacts());
+      }
     }
   }
 
@@ -98,6 +100,14 @@ class _HomePageState extends State<HomePage> {
                           icon: const Icon(Icons.clear),
                         ),
                       ),
+                      onFieldSubmitted: (value) {
+                        if (value.isNotEmpty) {
+                          FocusScope.of(context).unfocus();
+                          context.read<ContactBloc>().add(
+                              ContactEvent.searchContact(
+                                  searchContactNameController.text));
+                        }
+                      },
                     ),
                     const SizedBox(height: 6),
                     SizedBox(
@@ -107,6 +117,7 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.all(6.0)
                         ),
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
                           context.read<ContactBloc>().add(
                               ContactEvent.searchContact(
                                   searchContactNameController.text));
@@ -124,10 +135,11 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 12),
                     _isStateLoading(state) ? const Center(child: CupertinoActivityIndicator(),) : Expanded(
                       child: ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 14),
                         controller: scrollController,
                         itemCount: listContact.length,
                         itemBuilder: (context, index) {
-                          if (index == listContact.length) {
+                          if (index == (listContact.length - 1) && state.state == StateStatus.loadingLoadMore) {
                             return const CupertinoActivityIndicator();
                           }
                           return ItemAppWithImageWidget(
@@ -168,12 +180,16 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Flexible(
                   child: DropdownButton(
+                    hint: const Text('Choose filter'),
                     value: state.selectedGender != null ? (state.selectedGender).toString() : null,
                     items: state.genders.map((gender) => DropdownMenuItem(
                       value: gender,
                       child: Text(gender),
                     )).toList(), 
                     onChanged: (val) {
+                      if (searchContactNameController.text.isNotEmpty) {
+                        searchContactNameController.clear();
+                      }
                       contactBloc.add(ContactEvent.searchGenderContact('$val'));
                     }
                   ),
