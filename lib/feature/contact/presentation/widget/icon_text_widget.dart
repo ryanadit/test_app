@@ -19,6 +19,7 @@ class IconTextWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
             iconData ?? Icons.email,
