@@ -14,7 +14,7 @@ class DetailContactPage extends StatelessWidget {
 
   final ContactModel contact;
 
-  void actionCall() async {
+  void actionEmail() async {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: '${contact.email}',
@@ -24,7 +24,7 @@ class DetailContactPage extends StatelessWidget {
     }
   }
 
-  void actionEmail() async {
+  void actionCaller() async {
     final Uri phoneLaunchUri = Uri(
       scheme: 'tel',
       path: '${contact.numberPhone}',
@@ -101,14 +101,14 @@ class DetailContactPage extends StatelessWidget {
                           text: '${contact.email}',
                           iconData: Icons.email,
                           iconColor: Colors.orange.shade400,
-                          onTap: actionCall,
+                          onTap: actionEmail,
                         ),
                         spaceWidgetLarge,
                         IconTextWidget(
                           text: '${contact.numberPhone}',
                           iconData: Icons.phone,
                           iconColor: Colors.green.shade300,
-                          onTap: actionCall,
+                          onTap: actionCaller,
                         ),
                         spaceWidgetLarge,
                         IconTextWidget(
