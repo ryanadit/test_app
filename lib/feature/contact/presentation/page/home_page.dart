@@ -86,7 +86,9 @@ class _HomePageState extends State<HomePage> {
               ),
               body: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Column(
+                child: (listContact.isEmpty && state.state == StateStatus.errorLoad) 
+                ? _failedInitLoadWidget() 
+                : Column(
                   children: [
                     TextFormField(
                       controller: searchContactNameController,
@@ -161,6 +163,35 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _failedInitLoadWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Failed load contacts'),
+          const SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            child: TextButton(
+              style: TextButton.styleFrom(
+                  backgroundColor: Colors.green.shade400,
+                  padding: const EdgeInsets.all(6.0)),
+              onPressed: () {
+                contactBloc
+                    .add(ContactEvent.loadInitContacts());
+              },
+              child: const Text(
+                'Refresh',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -34,6 +34,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   int maxLoadCount = 15; // -> 300 / 20 = 15
 
   FutureOr<void> _onLoadContacts(_LoadInitContacts event, Emitter emit) async {
+    emit(ContactState.initial());
     emit(state.copyWith(state: StateStatus.loading));
     
     final result = await _getContactsUsecase.call(ContactParamEntity(
