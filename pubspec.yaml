@@ -50,6 +50,7 @@ dependencies:
   freezed: ^2.4.6
   flutter_launcher_icons: ^0.13.1
   bloc_test: ^9.1.5
+  http_mock_adapter: ^0.6.1
 
 dev_dependencies:
   flutter_test:
