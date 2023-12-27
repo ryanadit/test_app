@@ -20,9 +20,6 @@ class ContactRepositoryImpl implements ContactRepository {
         UrlHelper.contactApi,
         queryParameters: data.toJsonParam(),
       );
-      if (response.statusCode == 404) {
-        return Left(FailedResponse(error: 'Contact not found'));
-      }
       final result = response.data;
       if (result is List) {
         for (var item in result) {
@@ -30,6 +27,11 @@ class ContactRepositoryImpl implements ContactRepository {
         }
       }
       return Right(contacts);
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 404) {
+        return Left(FailedResponse(error: 'Contact not found'));
+      }
+      return Left(FailedResponse(error: 'Something wrong'));
     } catch (error) {
       return Left(FailedResponse(error: 'error : $error'));
     }
@@ -43,9 +45,6 @@ class ContactRepositoryImpl implements ContactRepository {
         UrlHelper.contactApi,
         queryParameters: data.toJsonParamSearch(),
       );
-      if (response.statusCode == 404) {
-        return Left(FailedResponse(error: 'Contact not found'));
-      }
       final result = response.data;
       if (result is List) {
         for (var item in result) {
@@ -53,6 +52,11 @@ class ContactRepositoryImpl implements ContactRepository {
         }
       }
       return Right(contacts);
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 404) {
+        return Left(FailedResponse(error: 'Contact not found'));
+      }
+      return Left(FailedResponse(error: 'Something wrong'));
     } catch (error) {
       return Left(FailedResponse(error: 'error : $error'));
     }
